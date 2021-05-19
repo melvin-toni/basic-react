@@ -6,6 +6,7 @@ import Login from '../Login/Login';
 
 import Navbar from './Navbar';
 import ClientList from '../Clients/Client-list';
+import ClientEdit from '../Clients/Client-edit';
 import useToken from './useToken';
 import axios from 'axios';
 
@@ -40,6 +41,7 @@ function App() {
         
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/client-list" component={ClientList} />
+        <Route path="/client-edit/:id" component={ClientEdit} />
       </BrowserRouter>
     </div>
   );

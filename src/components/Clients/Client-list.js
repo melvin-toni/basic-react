@@ -7,6 +7,9 @@ const Exercise = props => (
   <tr>
     <td>{props.exercise.name}</td>
     <td>{JSON.stringify(JSON.parse(props.exercise.description).description).replace(/\"/g, '')}</td>
+    <td>
+      <Link to={"/client-edit/"+props.exercise.id}>edit</Link>
+    </td>
   </tr>
 )
 
