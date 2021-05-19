@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
-import Clients from '../Clients/Clients';
+import Clients from '../Clients/Client-list';
 import Axios from 'axios';
 import { BrowserRouter, Route, Switch, useHistory, Redirect } from 'react-router-dom';
 
