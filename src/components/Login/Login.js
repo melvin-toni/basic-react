@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
+import Clients from '../Clients/Clients';
 import Axios from 'axios';
-import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useHistory, Redirect } from 'react-router-dom';
 
 async function loginUser(credentials) {
 
@@ -26,8 +27,19 @@ export default function Login({ setToken }) {
             email,
             password
         });
-        console.log('token >>', val.credentials);
-        setToken(val.credentials);
+        console.log('CHECK VAAAAAAL >>', val);
+        if (val.meta.type === 'Unauthorized') {
+            alert('Login failed');
+            return <Login setToken={setToken} />
+        } else {
+            // const history = this.props;
+            setToken(val.credentials);
+            console.log('REDIRECT KUY');
+            <Redirect to="/clients" />
+            // return <Redirect to="/clients" />;
+            // history.push("/clients");
+            // return <Clients />
+        }
     }
     
     return(
