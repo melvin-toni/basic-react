@@ -1,72 +1,86 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import './Login.css';
-import Clients from '../Clients/Client-list';
-import Axios from 'axios';
-import { BrowserRouter, Route, Switch, useHistory, Redirect } from 'react-router-dom';
 
 async function loginUser(credentials) {
-
-    return fetch('https://dev.innov.id/bara-mcp/public/api/client-login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    }).then(data => data.json())
+	return fetch('https://dev.innov.id/bara-mcp/public/api/client-login', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(credentials)
+	}).then(data => data.json())
 }
 
 export default function Login({ setToken }) {
-    const [firmIdentifier, setFirmIdentifier] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const handleSubmit = async e => {
-        e.preventDefault();
-        const val = await loginUser({
-            firmIdentifier,
-            email,
-            password
-        });
-        console.log('CHECK VAAAAAAL >>', val);
-        if (val.meta.type === 'Unauthorized') {
-            alert('Login failed');
-            return <Login setToken={setToken} />
-        } else {
-            // const history = this.props;
-            setToken(val.credentials);
-            console.log('REDIRECT KUY');
-            <Redirect to="/clients" />
-            // return <Redirect to="/clients" />;
-            // history.push("/clients");
-            // return <Clients />
-        }
-    }
-    
-    return(
-        <div className="login-wrapper">
-            <h1>Please Log In</h1>
+	const [firmIdentifier, setFirmIdentifier] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const handleSubmit = async e => {
+		e.preventDefault();
+		const val = await loginUser({
+			firmIdentifier,
+			email,
+			password
+		});
+		if (val.meta.type === 'Unauthorized') {
+			alert('Login failed');
+			return <Login setToken={setToken} />
+		} else {
+			setToken(val.credentials);
+			<Redirect to="/client-list" />
+		}
+	}
 
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Firm ID</p>
-                    <input type="text" name="firmIdentifier" onChange={(e) => {setFirmIdentifier(e.target.value)}} />
-                </label> 
-                <label>
-                    <p>Email</p>
-                    <input type="text" name="email" onChange={(e) => {setEmail(e.target.value)}} />
-                </label> 
-                <label>
-                    <p>Password</p>
-                    <input type="password" name="password" onChange={(e) => {setPassword(e.target.value)}} />
-                </label> 
-                <div>
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
-        </div>
-    );
+	return (
+
+		<div className="container d-flex justify-content-center">
+			<div className="box_login col-4 p-3">
+				<div className="text-center">
+					<h1>Log In</h1>
+				</div>
+
+				<form onSubmit={handleSubmit}>
+
+					<div className="row align-items-center">
+						<div className="col-3">
+							<label className="col-form-label">Firm ID</label>
+						</div>
+						<div className="col-9">
+							<input type="text" name="firmIdentifier" className="form-control" onChange={(e) => { setFirmIdentifier(e.target.value) }} />
+						</div>
+					</div>
+
+					<div className="row align-items-center">
+						<div className="col-3">
+							<label className="col-form-label">Email</label>
+						</div>
+						<div className="col-9">
+							<input type="text" name="email" className="form-control" onChange={(e) => { setEmail(e.target.value) }} />
+						</div>
+					</div>
+
+					<div className="row align-items-center">
+						<div className="col-3">
+							<label className="col-form-label">Password</label>
+						</div>
+						<div className="col-9">
+							<input type="password" name="password" className="form-control" onChange={(e) => { setPassword(e.target.value) }} />
+						</div>
+					</div>
+
+					<div className="row align-items-center">
+						<div className="offset-3 col-9">
+							<button type="submit" className="btn btn-primary">Submit</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	);
 }
 
 Login.propTypes = {
-    setToken: PropTypes.func.isRequired
+	setToken: PropTypes.func.isRequired
 }

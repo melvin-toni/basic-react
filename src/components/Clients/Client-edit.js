@@ -17,29 +17,16 @@ export default class ClientEdit extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://dev.innov.id/bara-mcp/public/api/client/bio-forms/'+this.props.match.params.id)
+    axios.get('https://dev.innov.id/bara-mcp/public/api/client/bio-forms/' + this.props.match.params.id)
       .then(response => {
-        console.log('CHECK EDIT >>', response.data.data.name)
         this.setState({
           name: response.data.data.name,
-          description: response.data.data.description
-        })   
+          description: JSON.stringify(JSON.parse(response.data.data.description).description).replace(/\"/g, '')
+        })
       })
       .catch(function (error) {
         console.log(error);
-      })
-
-    // axios.get('http://localhost:5000/users/')
-    //   .then(response => {
-    //     if (response.data.length > 0) {
-    //       this.setState({
-    //         users: response.data.map(user => user.username),
-    //       })
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
+      });
 
   }
 
@@ -63,8 +50,6 @@ export default class ClientEdit extends Component {
       description: this.state.description
     }
 
-    console.log('SUBMIT EDIT >>>', exercise);
-
     axios.put('https://dev.innov.id/bara-mcp/public/api/client/bios/' + this.props.match.params.id, exercise)
       .then(res => console.log(res.data));
 
@@ -73,33 +58,33 @@ export default class ClientEdit extends Component {
 
   render() {
     return (
-    <div>
-      <h3>Edit Client</h3>
-      <form onSubmit={this.onSubmit}>
-        <div className="form-group"> 
-          <label>Name: </label>
-          <input  type="text"
+      <div>
+        <h3>Edit Client</h3>
+        <form onSubmit={this.onSubmit}>
+          <div className="form-group">
+            <label>Name: </label>
+            <input type="text"
               required
               className="form-control"
               value={this.state.name}
               onChange={this.onChangeName}
-              />
-        </div>
-        <div className="form-group"> 
-          <label>Description: </label>
-          <input  type="text"
+            />
+          </div>
+          <div className="form-group">
+            <label>Description: </label>
+            <input type="text"
               required
               className="form-control"
               value={this.state.description}
               onChange={this.onChangeDescription}
-              />
-        </div>
+            />
+          </div>
 
-        <div className="form-group">
-          <input type="submit" value="Edit Exercise Log" className="btn btn-primary" />
-        </div>
-      </form>
-    </div>
+          <div className="form-group">
+            <input type="submit" value="Edit Exercise Log" className="btn btn-primary" />
+          </div>
+        </form>
+      </div>
     )
   }
 }

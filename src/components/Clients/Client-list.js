@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import useToken from '../App/useToken';
 
-const Exercise = props => (
+const Client = props => (
   <tr>
-    <td>{props.exercise.name}</td>
-    <td>{JSON.stringify(JSON.parse(props.exercise.description).description).replace(/\"/g, '')}</td>
+    <td>{props.cl.name}</td>
+    <td>{JSON.stringify(JSON.parse(props.cl.description).description).replace(/\"/g, '')}</td>
     <td>
-      <Link to={"/client-edit/"+props.exercise.id}>edit</Link>
+      <Link to={"/client-edit/" + props.cl.id}>edit</Link>
     </td>
   </tr>
 )
@@ -18,29 +17,25 @@ export default class ClientList extends Component {
   constructor(props) {
     super(props);
 
-    // this.deleteExercise = this.deleteExercise.bind(this)
-
-    this.state = {exercises: []};
+    this.state = { cl: [] };
   }
 
   componentDidMount() {
     axios.get('https://dev.innov.id/bara-mcp/public/api/client/bio-forms').then(response => {
-        console.log('JX >>', response.data.data.list);
-        this.setState({ exercises: response.data.data.list })
+      this.setState({ cl: response.data.data.list })
     }).catch((error) => {
       console.log(error);
     })
   }
 
-  exerciseList() {
-    return this.state.exercises.map(currentexercise => {
-      console.log('currentexercise >>', currentexercise);
-      return <Exercise exercise={currentexercise} key={currentexercise.id}/>;
+  clientList() {
+    return this.state.cl.map(c => {
+      return <Client cl={c} key={c.id} />;
     });
   }
 
   render() {
-    return(
+    return (
       <div>
         <h3>Client List</h3>
         <table className="table">
@@ -48,10 +43,11 @@ export default class ClientList extends Component {
             <tr>
               <th>Name</th>
               <th>Description</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            { this.exerciseList() }
+            {this.clientList()}
           </tbody>
         </table>
       </div>
